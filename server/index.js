@@ -11,7 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.resolve(__dirname, '..', 'public')));
 
 app.get('/fetchParkData', (req,res) => {
-   let parkEvents=[];
+let parkEvents=[];
   var options = {
       uri: 'https://developer.nps.gov/api/v1/alerts?q=covid&limit=10&api_key=RYDXLqvgSZRPuLtkPZhC8Nh4eZFv0b6ctDTvOzag',
       headers: { 'User-Agent': 'Request-Promise' },
@@ -26,6 +26,14 @@ rp(options)
    ))).then(()=>res.send(parkEvents))
    .catch(err=>console.log('** Error with fetching Park Data', err))
 });
+
+app.get('/fetchAnimalImages/:query', (req,res) => {
+   const invalidQuery = req.params.query
+   const query = invalidQuery.replace(' ', '+');
+   console.log('query', query)
+
+// axios.get('https://pixabay.com/api/?key=16129018-01327812094cdee813e33175d&q=yellow+flowers&image_type=photo')
+})
 
 app.listen(PORT, () => console.log(`You are listening to port ${PORT}`));
 

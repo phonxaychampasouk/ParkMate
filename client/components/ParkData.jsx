@@ -1,12 +1,12 @@
 import React from 'react';
 
-function displayData({ parkData }){
-  console.log('displayData')
+
+function ParkData({ parkData }){
   return(
 <div>Test
-  {parkData}
+
 </div>
   )
 
 }
-export default displayData;
+export default ParkData;

@@ -23,6 +23,7 @@
     "path": "^0.12.7",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
+    "regenerator-runtime": "^0.13.5",
     "request": "^2.88.2",
     "request-promise": "^4.2.5"
   },

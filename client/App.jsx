@@ -1,21 +1,26 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import regeneratorRuntime from "regenerator-runtime";
 import ParkData from './components/ParkData';
 import SearchAnimal from './components/SearchAnimal';
-import DisplayOwnRecord from  './components/DisplayOwnRecord';
-import DisplayAnimals from './components/DisplayAnimals';
+// import DisplayOwnRecord from  './components/DisplayOwnRecord';
+//import DisplaySearch from './components/DisplaySearch';
+// import DisplayParkData from './components/DisplayParkData';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      search: null,
-      parkEvents: null,
+      search: '',
+      parkEvents: [],
       retrieveAnimal: null,
       profileRecords: null,
-      DisplayAnimals: null,
+      displayAnimals: null,
+      modalId: false,
+
     }
     this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
   /*
   RetrieveAnimals is the name of animal that the Client is searching for.
@@ -28,7 +33,8 @@ class App extends Component {
 
   componentDidMount() {
     axios.get('/fetchParkData')
-      .then( ({ data }) => data)
+      .then(async ({ data }) => this.setState({
+        parkEvents: data}))
       .catch(err =>
         console.log('** Error retrieving Park Data **', err));
     console.log('this.state.parkevents: ', this.state.parkEvents)
@@ -39,36 +45,52 @@ class App extends Component {
     const { target } = e;
     const { search, retrieveAnimal } = this.state;
     this.setState({
-      [target.name]: target.value });
+      [target.name]: target.value
+    });
+    console.log('this.state.search', this.state.search)
   }
-  handleSubmit() {
-    axios.get('/fetchAnimalImages')
-      .then()
-      .catch(e=>console.log('**Error with retrieving Animal Images**', e))
+  handleSubmit(e) {
+    e.preventDefault();
+    this.setState({
+      search: '',
+    })
+    const { modalId, search } = this.state;
+    console.log('search', search)
+    axios.get(`/fetchAnimalImages/${search}`)
+      //TODO: save response to DisplaySearch
+      .then(()=>this.setState({
+        modalId : !modalId,
+      })).then(()=>console.log(modalId))
+      .catch(e => console.log('**Error with retrieving Animal Images**', e))
   }
   render() {
-    const { parkEvents, retrieveAnimal, search , profileRecords,
-    DisplayOwnRecord} = this.state;
-    return (
-      <div id="main">
-        <ParkData parkEvents={parkEvents} />
-        <SearchAnimal
-          search={search}
-          retrieveAnimal={retrieveAnimal}
-          handleChange={this.handleChange}
-          onSubmit={this.onSubmit}
-        />
+    const { parkEvents, retrieveAnimal, search, profileRecords,
+      DisplayOwnRecord, displayAnimals, modalId } = this.state;
+    if (!modalId) {
+      return (
+        <div id="main">
+          <ParkData parkEvents={parkEvents} />
+          <SearchAnimal
+            search={search}
+            retrieveAnimal={retrieveAnimal}
+            handleChange={this.handleChange}
+            onSubmit={this.handleSubmit}
+          />
+              {/*
         <DisplayOwnRecord
           profileRecords={profileRecords}
-
         />
-         <DisplayAnimals
+          */}
+        </div>);
+    }
+    if (modalId) {
+      return (
+        <DisplaySearchModal
           retrieveAnimal={retrieveAnimal}
           displayAnimals={displayAnimals}
-         />
-      </div>
-    )
-
+        />
+      )
+    }
   }
 }
 
