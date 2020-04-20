@@ -39,19 +39,16 @@ class App extends Component {
   async fetchParkData() {
     return await axios.get('/fetchParkData').then(({ data }) => this.setState({
       parkAlerts: data,
-    })).then(()=>console.log(this.state.parkAlerts))
+    })).catch(e=>console.log('** Error with ferching Park Data', e))
 
   }
   async fetchAnimalImages() {
     const { modalId, search } = this.state;
     return await axios.get(`/fetchAnimalImages/${search}`)
-      .then((res) => console.log('res', res))
-      // this.setState({
-      //   search: '',
-      //   modalId: !modalId,
-      //   displayAnimals: data,
-      // }))
-      .then(()=> console.log('displayAnimals: ', this.state.displayAnimals)).catch(e => console.log('**Error with retrieving Animal Images**', e))
+      .then(({ data }) => this.setState({
+        displayAnimals: data,
+      }))
+      .catch(e => console.log('**Error with retrieving Animal Images**', e))
 
   }
   handleChange(e) {
@@ -64,9 +61,11 @@ class App extends Component {
     console.log('this.state.search: ', this.state.search)
   }
   handleSubmit(e) {
+    const { modalId } = this.state;
     e.preventDefault();
+    this.fetchAnimalImages();
     this.setState({
-      modalId: true,
+      modalId: !modalId,
     })
 
     // const { modalId, search } = this.state;

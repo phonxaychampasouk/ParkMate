@@ -1,25 +1,23 @@
 import React, { Component } from 'react';
-class DisplaySearchModal extends Component {
-  constructor(props) {
-      super(props);
-      this.state = {
-          isFetching: false,
-          users: []
-      };
 
+function DisplaySearchModal({ displayAnimals, fetchAnimalImages })  {
+  console.log('display animals', displayAnimals)
+  if(displayAnimals){
+  const imageCarousel = displayAnimals.map((image, index) =>
+    <div key={image.url}>
+      <img src={image.url} />
+      <li>{image.tags}</li>
+    </div>)
+    return (
+      <div id="display-search-modal">
+        {imageCarousel}
+      </div>
+    )
+  }else{
+    return(
+      <div>Loading....</div>
+    )
   }
-  componentDidMount() {
-    const { fetchAnimalImages } = this.props;
-    fetchAnimalImages();
-  }
-render() {
-  return (
-    <div>
-      test
-    </div>
 
-  )
 }
-}
-
 export default DisplaySearchModal;
