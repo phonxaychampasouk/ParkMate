@@ -4,7 +4,7 @@ import regeneratorRuntime from "regenerator-runtime";
 import ParkData from './components/ParkData';
 import SearchAnimal from './components/SearchAnimal';
 // import DisplayOwnRecord from  './components/DisplayOwnRecord';
-//import DisplaySearch from './components/DisplaySearch';
+import DisplaySearchModal from './modals/DisplaySearchModal';
 // import DisplayParkData from './components/DisplayParkData';
 
 class App extends Component {
@@ -12,7 +12,7 @@ class App extends Component {
     super(props);
     this.state = {
       search: '',
-      parkEvents: [],
+      parkAlerts: [],
       retrieveAnimal: null,
       profileRecords: null,
       displayAnimals: null,
@@ -22,46 +22,38 @@ class App extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.fetchParkData = this.fetchParkData.bind(this);
+    this.fetchAnimalImages = this.fetchAnimalImages.bind(this);
   }
   /*
   RetrieveAnimals is the name of animal that the Client is searching for.
   RetrieveAnimals needs to be able to convert common animal names into their Scienticfic names to be easily queried by databases.
 
-  ParkEvents is collected by an API call to the National Park Services API to fetch "Alerts". I have specified my response to only contain alerts pertaining rto "COVID-19".
+  ParkAlerts is collected by an API call to the National Park Services API to fetch "Alerts". I have specified my response to only contain alerts pertaining rto "COVID-19".
 
   ProfileRecords will query the users database to display the animals, routes and location of their submissions.
   */
 
   componentDidMount() {
     this.fetchParkData()
-    // axios.get('/fetchParkData')
-    //   .then(({ data }) => this.setState({
-    //     parkEvents: data}))
-    //   .catch(err =>
-    //     console.log('** Error retrieving Park Data **', err));
-    // console.log('this.state.parkevents: ', this.state.parkEvents)
   }
-async fetchParkData() {
+  async fetchParkData() {
+    return await axios.get('/fetchParkData').then(({ data }) => this.setState({
+      parkAlerts: data,
+    })).then(()=>console.log(this.state.parkAlerts))
 
-    let response = await axios.get('/fetchParkData').then(({ data })=>this.setState({
-      parkEvents: data,
-    }))
-console.log(this.state.parkEvents)
-    // await new Promise((resolve, reject) => console.log('resolve', resolve));
+  }
+  async fetchAnimalImages() {
+    const { modalId, search } = this.state;
+    return await axios.get(`/fetchAnimalImages/${search}`)
+      .then((res) => console.log('res', res))
+      // this.setState({
+      //   search: '',
+      //   modalId: !modalId,
+      //   displayAnimals: data,
+      // }))
+      .then(()=> console.log('displayAnimals: ', this.state.displayAnimals)).catch(e => console.log('**Error with retrieving Animal Images**', e))
 
-    // // read github user
-    // let githubResponse = await fetch(`https://api.github.com/users/${user.name}`);
-    // let githubUser = await githubResponse.json();
-
-    // // show the avatar
-    // let img = document.createElement('img');
-    // img.src = githubUser.avatar_url;
-    // img.className = "promise-avatar-example";
-    // document.body.append(img);
-
-    // // wait 3 seconds
-    // await new Promise((resolve, reject) => setTimeout(resolve, 3000));
-}
+  }
   handleChange(e) {
     e.preventDefault();
     const { target } = e;
@@ -69,36 +61,35 @@ console.log(this.state.parkEvents)
     this.setState({
       [target.name]: target.value
     });
-    console.log('this.state.search', this.state.search)
+    console.log('this.state.search: ', this.state.search)
   }
   handleSubmit(e) {
     e.preventDefault();
     this.setState({
-      search: '',
+      modalId: true,
     })
-    const { modalId, search } = this.state;
-    console.log('search', search)
-    axios.get(`/fetchAnimalImages/${search}`)
-      //TODO: save response to DisplaySearch
-      .then(()=>this.setState({
-        modalId : !modalId,
-      })).then(()=>console.log(modalId))
-      .catch(e => console.log('**Error with retrieving Animal Images**', e))
+
+    // const { modalId, search } = this.state;
+    // console.log('search', search)
+    // axios.get(`/fetchAnimalImages/${search}`)
+    //   //TODO: save response to DisplaySearch
+    //   .then(() => console.log(modalId))
+    //   .catch(e => console.log('**Error with retrieving Animal Images**', e))
   }
   render() {
-    const { parkEvents, retrieveAnimal, search, profileRecords,
+    const { parkAlerts, retrieveAnimals, search, profileRecords,
       DisplayOwnRecord, displayAnimals, modalId } = this.state;
     if (!modalId) {
       return (
         <div id="main">
-          <ParkData parkEvents={parkEvents} />
+          <ParkData parkAlerts={parkAlerts} />
           <SearchAnimal
             search={search}
-            retrieveAnimal={retrieveAnimal}
+            retrieveAnimal={retrieveAnimals}
             handleChange={this.handleChange}
             onSubmit={this.handleSubmit}
           />
-              {/*
+          {/*
         <DisplayOwnRecord
           profileRecords={profileRecords}
         />
@@ -106,10 +97,13 @@ console.log(this.state.parkEvents)
         </div>);
     }
     if (modalId) {
+      console.log('displayAnimals in modal: ', displayAnimals)
+      console.log('retrieveAnimals', retrieveAnimals)
       return (
         <DisplaySearchModal
-          retrieveAnimal={retrieveAnimal}
+          retrieveAnimals={retrieveAnimals}
           displayAnimals={displayAnimals}
+          fetchAnimalImages={this.fetchAnimalImages}
         />
       )
     }

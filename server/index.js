@@ -29,16 +29,16 @@ rp(options)
 
 app.get('/fetchAnimalImages/:query', (req,res) => {
    const invalidQuery = req.params.query
-   const search = invalidQuery.replace(' ', '+');
+   const search = invalidQuery.replace(" ","+");
+   console.log('search', search )
+   let searchResults = [];
    var options = {
-      uri: `https://pixabay.com/api/?key=16129018-01327812094cdee813e33175d&q=yellow+flowers&image_type=photo`,
+      uri: `https://pixabay.com/api/?key=16129018-01327812094cdee813e33175d&q=${search}&image_type=photo&pretty=true&per_page=25`,
       headers: { 'User-Agent': 'Request-Promise' },
       json: true
       };
    rp(options)
-      .then(({ data })=>console.log('date', data))
-
-// axios.get('')
+      .then(({ hits })=>hits.forEach(images=>searchResults.push({url:images.webformatURL, tags: images.tags }))).then(()=>res.send(searchResults));
 })
 
 app.listen(PORT, () => console.log(`You are listening to port ${PORT}`));
