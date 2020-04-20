@@ -21,6 +21,7 @@ class App extends Component {
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.fetchParkData = this.fetchParkData.bind(this);
   }
   /*
   RetrieveAnimals is the name of animal that the Client is searching for.
@@ -32,14 +33,35 @@ class App extends Component {
   */
 
   componentDidMount() {
-    axios.get('/fetchParkData')
-      .then(async ({ data }) => this.setState({
-        parkEvents: data}))
-      .catch(err =>
-        console.log('** Error retrieving Park Data **', err));
-    console.log('this.state.parkevents: ', this.state.parkEvents)
+    this.fetchParkData()
+    // axios.get('/fetchParkData')
+    //   .then(({ data }) => this.setState({
+    //     parkEvents: data}))
+    //   .catch(err =>
+    //     console.log('** Error retrieving Park Data **', err));
+    // console.log('this.state.parkevents: ', this.state.parkEvents)
   }
+async fetchParkData() {
 
+    let response = await axios.get('/fetchParkData').then(({ data })=>this.setState({
+      parkEvents: data,
+    }))
+console.log(this.state.parkEvents)
+    // await new Promise((resolve, reject) => console.log('resolve', resolve));
+
+    // // read github user
+    // let githubResponse = await fetch(`https://api.github.com/users/${user.name}`);
+    // let githubUser = await githubResponse.json();
+
+    // // show the avatar
+    // let img = document.createElement('img');
+    // img.src = githubUser.avatar_url;
+    // img.className = "promise-avatar-example";
+    // document.body.append(img);
+
+    // // wait 3 seconds
+    // await new Promise((resolve, reject) => setTimeout(resolve, 3000));
+}
   handleChange(e) {
     e.preventDefault();
     const { target } = e;
