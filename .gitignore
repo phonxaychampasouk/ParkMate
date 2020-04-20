@@ -26,3 +26,11 @@ dist/
 local/
 public/
 
+#Other
+.babelrc
+.eslintignore
+.eslintrc.js
+.gitignore
+.nvmrc
+.vscode/
+

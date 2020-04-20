@@ -11,13 +11,20 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.resolve(__dirname, '..', 'public')));
 
 app.get('/fetchParkData', (req,res) => {
-  console.log('test')
+   let parkEvents=[];
   var options = {
       uri: 'https://developer.nps.gov/api/v1/alerts?q=covid&limit=10&api_key=RYDXLqvgSZRPuLtkPZhC8Nh4eZFv0b6ctDTvOzag',
       headers: { 'User-Agent': 'Request-Promise' },
       json: true
       };
-rp(options).then( res =>res.data.forEach(event=>console.log('event', event))).catch(err=>console.log('** Error with fetching Park Data', err))
+rp(options)
+.then( ({ data }) => data.forEach(event=>
+   parkEvents.push(
+      {  title: event.title,
+         description: event.description,
+         url: event.url  }
+   ))).then(()=>res.send(parkEvents))
+   .catch(err=>console.log('** Error with fetching Park Data', err))
 });
 
 app.listen(PORT, () => console.log(`You are listening to port ${PORT}`));
