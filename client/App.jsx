@@ -13,6 +13,7 @@ class App extends Component {
       parkEvents: null,
       retrieveAnimal: null,
       profileRecords: null,
+      DisplayAnimals: null,
     }
     this.handleChange = this.handleChange.bind(this);
   }
@@ -22,6 +23,7 @@ class App extends Component {
 
   ParkEvents is collected by an API call to the National Park Services API to fetch "Alerts". I have specified my response to only contain alerts pertaining rto "COVID-19".
 
+  ProfileRecords will query the users database to display the animals, routes and location of their submissions.
   */
 
   componentDidMount() {
@@ -31,16 +33,22 @@ class App extends Component {
         console.log('** Error retrieving Park Data **', err));
     console.log('this.state.parkevents: ', this.state.parkEvents)
   }
+
   handleChange(e) {
     e.preventDefault();
     const { target } = e;
     const { search, retrieveAnimal } = this.state;
     this.setState({
       [target.name]: target.value });
-    console.log('retrieveAnimal: ', retrieveAnimal);
+  }
+  handleSubmit() {
+    axios.get('/fetchAnimalImages')
+      .then()
+      .catch(e=>console.log('**Error with retrieving Animal Images**', e))
   }
   render() {
-    const { parkEvents, retrieveAnimal, search , profileRecords} = this.state;
+    const { parkEvents, retrieveAnimal, search , profileRecords,
+    DisplayOwnRecord} = this.state;
     return (
       <div id="main">
         <ParkData parkEvents={parkEvents} />
@@ -48,6 +56,7 @@ class App extends Component {
           search={search}
           retrieveAnimal={retrieveAnimal}
           handleChange={this.handleChange}
+          onSubmit={this.onSubmit}
         />
         <DisplayOwnRecord
           profileRecords={profileRecords}
@@ -55,6 +64,7 @@ class App extends Component {
         />
          <DisplayAnimals
           retrieveAnimal={retrieveAnimal}
+          displayAnimals={displayAnimals}
          />
       </div>
     )

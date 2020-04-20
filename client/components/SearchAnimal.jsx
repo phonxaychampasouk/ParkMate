@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-function SearchAnimal({ handleChange, search }) {
+function SearchAnimal({ handleChange, search, handleSubmit }) {
 return (
     <div id="search-bar">
       <label>
@@ -10,6 +10,7 @@ return (
       name="search"
       value={search}
       onChange={handleChange}
+      onSubmit={handleSubmit}
     />
     </label>
     </div>
