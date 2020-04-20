@@ -23,6 +23,7 @@ class App extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.fetchParkData = this.fetchParkData.bind(this);
     this.fetchAnimalImages = this.fetchAnimalImages.bind(this);
+    this.closeModal = this.closeModal.bind(this);
   }
   /*
   RetrieveAnimals is the name of animal that the Client is searching for.
@@ -67,17 +68,17 @@ class App extends Component {
     this.setState({
       modalId: !modalId,
     })
+    }
 
-    // const { modalId, search } = this.state;
-    // console.log('search', search)
-    // axios.get(`/fetchAnimalImages/${search}`)
-    //   //TODO: save response to DisplaySearch
-    //   .then(() => console.log(modalId))
-    //   .catch(e => console.log('**Error with retrieving Animal Images**', e))
+  closeModal() {
+    this.setState({
+      modalId: false,
+    })
   }
+
   render() {
-    const { parkAlerts, retrieveAnimals, search, profileRecords,
-      DisplayOwnRecord, displayAnimals, modalId } = this.state;
+    const { parkAlerts, retrieveAnimals, search, profileRecords, DisplayOwnRecord, closeModal,
+    displayAnimals, modalId } = this.state;
     if (!modalId) {
       return (
         <div id="main">
@@ -100,6 +101,7 @@ class App extends Component {
       console.log('retrieveAnimals', retrieveAnimals)
       return (
         <DisplaySearchModal
+          closeModal={this.closeModal}
           retrieveAnimals={retrieveAnimals}
           displayAnimals={displayAnimals}
           fetchAnimalImages={this.fetchAnimalImages}
