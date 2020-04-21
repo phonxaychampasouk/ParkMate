@@ -4,7 +4,7 @@ const path = require('path');
 const rp = require('request-promise');
 const cors = require('cors');
 const app = express();
-//const db = require('../database/index.js');
+const db = require('../database');
 
 const PORT = 4000;
 app.use(cors());
@@ -40,8 +40,20 @@ app.get('/fetchAnimalImages/:query', (req,res) => {
       json: true
       };
    rp(options)
-      .then(({ hits })=>hits.forEach(images=>searchResults.push({url:images.webformatURL, tags: images.tags }))).then(()=>res.send(searchResults));
+      .then(({ hits })=>hits.forEach(images=>
+         searchResults.push({url:images.webformatURL, tags: images.tags })))
+      .then(()=>res.send(searchResults));
 })
+
+app.get('/animals/find/:animal',(req, res) => {
+   db.retrieveAnimalRecord(req.params.animal)
+   .then((result)=>res.send(result))
+   .catch(e=>console.log('**Error with retrieve Animal Records', e))
+})
+
+// app.post(/'/animals/add/:animal', (req,res) => {
+//    db.insertAnimalRecord(req )
+// })
 
 app.listen(PORT, () => console.log(`You are listening to port ${PORT}`));
 

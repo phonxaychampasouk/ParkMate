@@ -58,7 +58,8 @@ class App extends Component {
     const { target } = e;
     const { search, retrieveAnimal } = this.state;
     this.setState({
-      [target.name]: target.value
+      [target.name]: target.value,
+      selectedAnimal: target.value,
     });
     console.log('this.state.search: ', this.state.search)
   }
@@ -80,8 +81,8 @@ class App extends Component {
 this.setState({
   selectedAnimal: tag,
 })
+console.log('selected animal', this.state.selectedAnimal)
   }
-
 
   render() {
     const { parkAlerts, retrieveAnimals, search, profileRecords, DisplayOwnRecord, closeModal,
@@ -109,6 +110,7 @@ this.setState({
                 <button type="button" onClick={()=>{this.closeModal()}}/>
            <DisplaySearchModal
              onClick={this.onClick}
+             onSubmit={this.onSubmit}
              retrieveAnimals={retrieveAnimals}
              displayAnimals={displayAnimals}
              fetchAnimalImages={this.fetchAnimalImages}

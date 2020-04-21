@@ -29,6 +29,7 @@ function DisplaySearchModal({ displayAnimals, fetchAnimalImages, closeModal, onC
         </div >)})
   return (
     <div id="display-search-modal">
+      <button type="button" onClick={()=>{closeModal()}}></button>
         {imagesInFlex}
     </div>
   )

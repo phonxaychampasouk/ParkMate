@@ -1,17 +1,17 @@
-const mongoose = require('mongoose');
+const { Client } = require('pg');
 
-mongoose.connect('mongodb://locaLhost/TrackingHistory', { useNewUrlParser: true });
-const db = mongoose.connection;
+const client = new Client({
+  host: 'localhost',
+  database: 'parkmate',
+})
+client.connect()
+.catch(err => console.error('error connecting', err.stack))
 
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', () => {
-  console.log('Connected to mongoDb');
-});
+var rat = 'rat';
+module.exports.retrieveAnimalRecord = (commonName) => {
+return client.query(`SELECT * FROM named inner join characteristics on characteristics.sciname = named.sciname WHERE comname LIKE '%${rat}%' ;`)
+}
 
-const observedAnimals = new mongoose.Schema({
-//TODO: add information users would like to save
-});
-
-const singleAnimal = mongoose.model('Image', observedAnimals);
-
-module.exports = singleAnimal;
+module.exports.insertAnimalRecord = (fname, lname, tags) => {
+return client.query(`INSERT INTO capture (fname, lname. tags) VALUES (${fname}, ${lname}, ${tags}); `)
+}
