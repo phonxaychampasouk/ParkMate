@@ -17,13 +17,14 @@ class App extends Component {
       profileRecords: null,
       displayAnimals: null,
       modalId: false,
-
+      selectedAnimal: '',
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.fetchParkData = this.fetchParkData.bind(this);
     this.fetchAnimalImages = this.fetchAnimalImages.bind(this);
     this.closeModal = this.closeModal.bind(this);
+    this.onClick = this.onClick.bind(this);
   }
   /*
   RetrieveAnimals is the name of animal that the Client is searching for.
@@ -75,6 +76,12 @@ class App extends Component {
       modalId: false,
     })
   }
+  onClick(tag) {
+this.setState({
+  selectedAnimal: tag,
+})
+  }
+
 
   render() {
     const { parkAlerts, retrieveAnimals, search, profileRecords, DisplayOwnRecord, closeModal,
@@ -97,15 +104,17 @@ class App extends Component {
         </div>);
     }
     if (modalId) {
-      console.log('displayAnimals in modal: ', displayAnimals)
-      console.log('retrieveAnimals', retrieveAnimals)
       return (
-        <DisplaySearchModal
-          closeModal={this.closeModal}
-          retrieveAnimals={retrieveAnimals}
-          displayAnimals={displayAnimals}
-          fetchAnimalImages={this.fetchAnimalImages}
-        />
+        <div id="search-container">
+                <button type="button" onClick={()=>{this.closeModal()}}/>
+           <DisplaySearchModal
+             onClick={this.onClick}
+             retrieveAnimals={retrieveAnimals}
+             displayAnimals={displayAnimals}
+             fetchAnimalImages={this.fetchAnimalImages}
+           />
+
+        </div>
       )
     }
   }

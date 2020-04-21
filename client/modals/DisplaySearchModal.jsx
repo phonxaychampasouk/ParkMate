@@ -3,27 +3,39 @@ import React, { Component } from 'react';
 //TODO: add onHoover over img to display tags animal
 //STRETCH: as well as display what they eat and where
 
-function DisplaySearchModal({ displayAnimals, fetchAnimalImages, closeModal })  {
-  console.log('display animals', displayAnimals)
-  if(displayAnimals){
-  const imagesInFlex = displayAnimals.map((image, index) =>
-    <div key={image.url}>
-      <img id="searched-image" src={image.url} />
-      <li>{image.tags}</li>
-    </div>)
-    return (
-      <div>
-        <button type="button" onClick={closeModal}>X</button>
-        <div id="display-search-modal">
-          {imagesInFlex}
+//TODO: onClick of tag user will persist to database
+//TODO: add an onClick function
+function DisplaySearchModal({ displayAnimals, fetchAnimalImages, closeModal, onClick }) {
+  if (displayAnimals) {
+    const imagesInFlex = displayAnimals.map((image, index) => {
+      const tags = image.tags.split(",");
+      const allTags = tags.map((tag, i) => (
+        <li
+          className="tags"
+          value={tag}
+          key={image.tags + i}
+          onClick={() => onClick(tag)}>
+          {tag}
+        </li>
+      ))
+      return (
+        <div className="search-results" key={image.url}>
+          <div id="image-overlay-container">
+        <img id="searched-image" src={image.url}/>
+        <div className="tag-container">
+          {allTags}
+          </div>
         </div>
-      </div>
-    )
-  }else{
-    return(
-      <div>Loading....</div>
-    )
+        </div >)})
+  return (
+    <div id="display-search-modal">
+        {imagesInFlex}
+    </div>
+  )
+} else {
+  return (
+    <div>Loading....</div>
+  )
+    }
   }
-
-}
 export default DisplaySearchModal;

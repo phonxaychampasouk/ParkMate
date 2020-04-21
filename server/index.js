@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.resolve(__dirname, '..', 'public')));
 
-app.get('/fetchParkData', (req,res) => {
+// app.get('/fetchParkData', (req,res) => {
 // let parkEvents=[];
 // const options = {
 //       uri: 'https://developer.nps.gov/api/v1/alerts?q=covid&limit=10&api_key=RYDXLqvgSZRPuLtkPZhC8Nh4eZFv0b6ctDTvOzag',
@@ -27,7 +27,7 @@ app.get('/fetchParkData', (req,res) => {
 //              url: event.url  }
 //        ))).then(()=>res.send(parkEvents))
 //        .catch(err=>console.log('** Error with fetching Park Data', err))
-});
+// });
 
 app.get('/fetchAnimalImages/:query', (req,res) => {
    const invalidQuery = req.params.query
