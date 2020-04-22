@@ -6,7 +6,7 @@ import SearchAnimal from './components/SearchAnimal';
 // import DisplayOwnRecord from  './components/DisplayOwnRecord';
 import DisplaySearchModal from './modals/DisplaySearchModal';
 // import DisplayParkData from './components/DisplayParkData';
-
+import KnownPredators from "./modals/KnownPredators";
 class App extends Component {
   constructor(props) {
     super(props);
@@ -18,6 +18,7 @@ class App extends Component {
       displayAnimals: null,
       modalId: false,
       selectedAnimal: '',
+      knownPredators: [],
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -25,6 +26,7 @@ class App extends Component {
     this.fetchAnimalImages = this.fetchAnimalImages.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.onClick = this.onClick.bind(this);
+    // this.onSubmit = this.onSubmit.bind(this);
   }
   /*
   RetrieveAnimals is the name of animal that the Client is searching for.
@@ -41,7 +43,7 @@ class App extends Component {
   async fetchParkData() {
     return await axios.get('/fetchParkData').then(({ data }) => this.setState({
       parkAlerts: data,
-    })).catch(e=>console.log('** Error with ferching Park Data', e))
+    })).catch(e => console.log('** Error with ferching Park Data', e))
 
   }
   async fetchAnimalImages() {
@@ -58,7 +60,8 @@ class App extends Component {
     const { target } = e;
     const { search, retrieveAnimal } = this.state;
     this.setState({
-      [target.name]: target.value
+      [target.name]: target.value,
+      selectedAnimal: target.value,
     });
     console.log('this.state.search: ', this.state.search)
   }
@@ -69,7 +72,7 @@ class App extends Component {
     this.setState({
       modalId: !modalId,
     })
-    }
+  }
 
   closeModal() {
     this.setState({
@@ -77,15 +80,31 @@ class App extends Component {
     })
   }
   onClick(tag) {
-this.setState({
-  selectedAnimal: tag,
-})
-  }
+    const { knownPredators } = this.state;
+    this.setState({
+      selectedAnimal: tag,
+    })
+    axios.get(`/animals/find/${tag}`)
+      .then(({ data }) => this.setState({
+        knownPredators: data.rows
+      }))
+      .catch(e => console.log('**Error retrieving other animals'))
 
+    console.log('knownPredators', knownPredators)
+  }
+  // onSubmit(animal){
+  // axios.get(`/animals/find/${animal}`)
+  // .then(({ data })=> this.setState({
+  //   knownPredators: data.rows}))
+  // .catch(e=>console.log('**Error retrieving other animals'))
+  // axios.post('/animal/add/: /: /:')
+  // .then()
+  // .catch()
+  //}
 
   render() {
-    const { parkAlerts, retrieveAnimals, search, profileRecords, DisplayOwnRecord, closeModal,
-    displayAnimals, modalId } = this.state;
+    const { parkAlerts, retrieveAnimals, search, profileRecords, DisplayOwnRecord, closeModal, selectedAnimal, knownPredators,
+      displayAnimals, modalId } = this.state;
     if (!modalId) {
       return (
         <div id="main">
@@ -106,16 +125,20 @@ this.setState({
     if (modalId) {
       return (
         <div id="search-container">
-                <button type="button" onClick={()=>{this.closeModal()}}/>
-           <DisplaySearchModal
-             onClick={this.onClick}
-             retrieveAnimals={retrieveAnimals}
-             displayAnimals={displayAnimals}
-             fetchAnimalImages={this.fetchAnimalImages}
-           />
-
+          <button type="button" onClick={() => { this.closeModal() }}>X</button>
+          <KnownPredators knownPredators={knownPredators} />
+          <DisplaySearchModal
+            knownPredators={knownPredators}
+            selectedAnimal={selectedAnimal}
+            onClick={this.onClick}
+            onSubmit={this.onSubmit}
+            retrieveAnimals={retrieveAnimals}
+            displayAnimals={displayAnimals}
+            fetchAnimalImages={this.fetchAnimalImages}
+          />
         </div>
       )
+
     }
   }
 }
