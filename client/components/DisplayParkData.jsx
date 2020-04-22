@@ -1,9 +1,6 @@
-import react from 'DisplayParkData'
+import React from 'react';
 
-function DisplayParkData = ({ ParkData }) => {
-console.log('ParkData', ParkData );
+function DisplayParkData({  }) {
 
-    <div></div>
-  )
 }
 export default DisplayParkData;

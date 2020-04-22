@@ -1,12 +1,20 @@
 import React from 'react';
 
-function displayData({ parkData }){
-  console.log('displayData')
-  return(
-<div>Test
-  {parkData}
-</div>
+
+function ParkData({ parkAlerts }) {
+  let alerts = parkAlerts.map(message =>
+    <h1>Alert:
+      "{message.title}" --
+      {message.description}
+      for more information
+        <h3>{message.url}</h3>
+    </h1>
+    )
+  return (
+    <div id="park-data">
+      {alerts}
+    </div>
   )
 
 }
-export default displayData;
+export default ParkData;

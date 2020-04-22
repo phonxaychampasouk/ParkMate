@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 
-function SearchAnimal({ handleChange, search }) {
+function SearchAnimal({ handleChange, search, onSubmit }) {
 return (
     <div id="search-bar">
+      <form onSubmit={onSubmit}>
       <label>
         Find:
     <input
@@ -12,6 +13,8 @@ return (
       onChange={handleChange}
     />
     </label>
+    <input type="submit" value="Submit" />
+    </form>
     </div>
     );
 }
