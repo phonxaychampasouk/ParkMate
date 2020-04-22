@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 
 //TODO: onClick of tag user will persist to database
 //TODO: add an onClick function
-function DisplaySearchModal({ displayAnimals, fetchAnimalImages, closeModal, onClick }) {
+function DisplaySearchModal({ displayAnimals, fetchAnimalImages, closeModal, onClick, onSubmit, selectedAnimal}) {
   if (displayAnimals) {
     const imagesInFlex = displayAnimals.map((image, index) => {
       const tags = image.tags.split(",");
@@ -29,7 +29,7 @@ function DisplaySearchModal({ displayAnimals, fetchAnimalImages, closeModal, onC
         </div >)})
   return (
     <div id="display-search-modal">
-      <button type="button" onClick={()=>{closeModal()}}></button>
+      <button id="submit-for-info" type="button" onClick={()=>{onSubmit(selectedAnimal)}}>Submit</button>
         {imagesInFlex}
     </div>
   )
