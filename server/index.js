@@ -37,7 +37,7 @@ app.get('/fetchAnimalImages/:query', (req, res) => {
   console.log('search', search);
   const searchResults = [];
   const options = {
-    uri: `https://pixabay.com/api/?key=16129018-01327812094cdee813e33175d&q=${search}&image_type=photo&pretty=true&per_page=25`,
+    uri: `https://pixabay.com/q=${search}&image_type=photo&pretty=true&per_page=25`,
     headers: { 'User-Agent': 'Request-Promise' },
     json: true,
   };
