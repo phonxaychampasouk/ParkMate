@@ -16,7 +16,7 @@ app.use(express.static(path.resolve(__dirname, '..', 'public')));
 app.get('/fetchParkData', (req, res) => {
   const parkEvents = [];
   const options = {
-    uri: 'https://developer.nps.gov/api/v1/alerts?q=covid&limit=10&api_key=RYDXLqvgSZRPuLtkPZhC8Nh4eZFv0b6ctDTvOzag',
+    uri: 'https://developer.nps.gov/api/v1/alerts?q=covid&limit=10',
     headers: { 'User-Agent': 'Request-Promise' },
     json: true,
   };
