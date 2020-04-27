@@ -81,6 +81,21 @@ npm install
 **Error Response:**
   * **Status Code:** 400 Bad Request error
   * **Content:** `{ error : "Bad Request error" }`
+  
+  ### GET /animals/find/:animal
+  
+  app.get('/animals/find/:animal', (req, res) => {
+  db.retrieveAnimalRecord(req.params.animal)
+  
+ ```
+ module.exports.retrieveAnimalRecord = (commonName) => {
+return client.query('SELECT * FROM named inner join characteristics on characteristics.sciname = named.sciname WHERE comname LIKE '%${rat}%' ;')
+}
+
+module.exports.insertAnimalRecord = (fname, lname, tags) => {
+return client.query('INSERT INTO capture (fname, lname. tags) VALUES (${fname}, ${lname}, ${tags}); ')
+} 
+```
 
 ## Authors
 - **Phonxay Champasouk** - Software Engineer
