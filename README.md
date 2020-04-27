@@ -1,6 +1,8 @@
 # ParkMate
 > An interactive application that allows users to quickly filter for and persist data from animal sighting in National Parks across America. [Development]
 
+![ParkMate Query](https://media.giphy.com/media/JPaWp8AVZOL3XZrKOj/giphy.gif)
+
 ## Table of Contents
 
 1. [Usage](#Usage)
